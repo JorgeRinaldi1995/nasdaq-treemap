@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Performance</title>
+    <style>
+        .container{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+        }
+        .gainers-container{
+            max-width: 50%;
+        }
+        .losers-container{
+            max-width: 50%;
+        }
+        .stock {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        h2, h3 {
+            margin: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Stock Performance</h1>
+
+    <div class="container">
+        <div id="gainers-container">
+            <h2>Day Gainers</h2>
+        </div>
+    
+        <div id="losers-container">
+            <h2>Day Losers</h2>
+        </div>
+    </div>
+    
+    <script>
+        function fetchData() {
+            fetch('/day_gainers')
+                .then(response => response.json())
+                .then(data => updateContainer(data, 'gainers-container'));
+
+            fetch('/day_losers')
+                .then(response => response.json())
+                .then(data => updateContainer(data, 'losers-container'));
+        }
+
+        function updateContainer(data, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';  // Clear previous data
+
+            data.forEach(stock => {
+                const stockDiv = document.createElement('div');
+                stockDiv.className = 'stock';
+                
+                const changeElement = document.createElement('h2');
+                changeElement.textContent = stock.Change;
+                stockDiv.appendChild(changeElement);
+                
+                const priceElement = document.createElement('h3');
+                priceElement.textContent = stock['Price (Intraday)'];
+                stockDiv.appendChild(priceElement);
+                
+                const nameElement = document.createElement('h3');
+                nameElement.textContent = stock.Name;
+                stockDiv.appendChild(nameElement);
+                
+                const symbolElement = document.createElement('h3');
+                symbolElement.textContent = stock.Symbol;
+                stockDiv.appendChild(symbolElement);
+
+                const volElement = document.createElement('h3');
+                volElement.textContent = stock.Volume;
+                stockDiv.appendChild(volElement);
+                
+                container.appendChild(stockDiv);
+            });
+        }
+
+        setInterval(fetchData, 10000);
+
+        fetchData();
+    </script>
+</body>
+
+</html>
