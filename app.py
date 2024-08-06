@@ -3,16 +3,6 @@ import yfinance as yf
 import requests_html
 from yahoo_fin import stock_info
 
-# Get the top gainers of the day
-day_gainers = stock_info.get_day_gainers()
-print("Day Gainers:")
-print(day_gainers)
-
-# Get the top losers of the day
-day_losers = stock_info.get_day_losers()
-print("\nDay Losers:")
-print(day_losers)
-
 app = Flask(__name__)
 
 def get_data(ticker, start_date=None, end_date=None, index_as_date=True, interval="1d"):
